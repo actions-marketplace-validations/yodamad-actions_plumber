@@ -1,0 +1,69 @@
+name: Plumber – example workflow
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"   # every Monday at 06:00 UTC
+
+jobs:
+  # ── Minimal: scan the current repo ──────────────────────────────────────────
+  scan:
+    name: Compliance scan (default)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write   # required for upload-sarif: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Plumber
+        uses: plumber-org/gh-action@v1
+        with:
+          threshold: 100
+
+  # ── Custom: lower threshold, specific controls, soft-fail ───────────────────
+  scan-custom:
+    name: Compliance scan (custom)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Plumber
+        id: plumber
+        uses: plumber-org/gh-action@v1
+        with:
+          version: v0.3.10
+          threshold: 80
+          config-file: ".plumber.yaml"
+          skip-controls: "some-control,another-control"
+          score: true
+          soft-fail: true
+          upload-sarif: true
+          upload-artifacts: true
+          artifact-name: "plumber-results"
+          artifact-retention-days: 14
+
+      - name: Use outputs
+        run: |
+          echo "Compliance: ${{ steps.plumber.outputs.compliance }}%"
+          echo "Passed:     ${{ steps.plumber.outputs.passed }}"
+
+  # ── Remote: scan a different repo without checking it out ───────────────────
+  scan-remote:
+    name: Compliance scan (remote repo)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Plumber
+        uses: plumber-org/gh-action@v1
+        with:
+          project: "my-org/my-other-repo"
+          github-token: ${{ secrets.ORG_READ_TOKEN }}
+          threshold: 90

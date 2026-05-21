@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  plumber:
+    name: Plumber compliance scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Plumber
+        uses: plumber-org/gh-action@main
+        with:
+          threshold: 90
+          score: true
+          upload-sarif: true
+          upload-artifacts: true
