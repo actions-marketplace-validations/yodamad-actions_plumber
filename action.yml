@@ -1,5 +1,5 @@
 name: "Plumber CI/CD Compliance Scan"
-description: "Analyze GitHub Actions workflows and repository settings for CI/CD compliance and supply-chain risks. Generates SARIF, PBOM and CycloneDX reports."
+description: "Analyze GitHub Actions workflows with [Plumber](https://getplumber.io)"
 author: "Plumber (getplumber.io)"
 
 branding:
