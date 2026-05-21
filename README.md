@@ -17,13 +17,13 @@ jobs:
       security-events: write   # required for SARIF upload
     steps:
       - uses: actions/checkout@v4
-      - uses: plumber-org/gh-action@v1
+      - uses: yodamad-actions/plumber@v0.0.2
 ```
 
 ### With a custom threshold
 
 ```yaml
-- uses: plumber-org/gh-action@v1
+- uses: yodamad-actions/plumber@v0.0.2
   with:
     threshold: 90       # fail if compliance drops below 90%
     score: true         # print letter score + points breakdown
@@ -32,7 +32,7 @@ jobs:
 ### Pin a specific version
 
 ```yaml
-- uses: plumber-org/gh-action@v1
+- uses: yodamad-actions/plumber@v0.0.2
   with:
     version: v0.3.10
 ```
@@ -40,7 +40,7 @@ jobs:
 ### Soft-fail (report only, never block)
 
 ```yaml
-- uses: plumber-org/gh-action@v1
+- uses: yodamad-actions/plumber@v0.0.2
   with:
     soft-fail: true
 ```
@@ -48,7 +48,7 @@ jobs:
 ### Scan a remote repository (no checkout needed)
 
 ```yaml
-- uses: plumber-org/gh-action@v1
+- uses: yodamad-actions/plumber@v0.0.2
   with:
     project: my-org/my-other-repo
     github-token: ${{ secrets.ORG_READ_TOKEN }}
@@ -57,7 +57,7 @@ jobs:
 ### Use step outputs
 
 ```yaml
-- uses: plumber-org/gh-action@v1
+- uses: yodamad-actions/plumber@v0.0.2
   id: plumber
   with:
     threshold: 80
@@ -148,7 +148,7 @@ For scanning a private remote repository, supply a token with `repo` scope via `
 Plumber auto-detects `.plumber.yaml` in the repository root. To use a custom path:
 
 ```yaml
-- uses: plumber-org/gh-action@v1
+- uses: yodamad-actions/plumber@v0.0.2
   with:
     config-file: "configs/plumber.yaml"
 ```
@@ -171,7 +171,7 @@ Plumber binaries are downloaded from [GitHub Releases](https://github.com/getplu
 To disable attestation verification (e.g. air-gapped environments):
 
 ```yaml
-- uses: plumber-org/gh-action@v1
+- uses: yodamad-actions/plumber@v0.0.2
   with:
     verify-attestation: false
 ```
